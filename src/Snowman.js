@@ -1,4 +1,9 @@
+//TODO - refactor to include a RESTART button that will choose
+// a new random word & restart game. 
+
+
 import React, { useState } from "react";
+import { randomWord, ENGLISH_WORDS } from "./words";
 
 import "./Snowman.css";
 import img0 from "./0.png";
@@ -23,12 +28,14 @@ import img6 from "./6.png";
  * - answer: selected secret word*
  */
 
+// TODO - refactor signature to use destructuring?
+
 function Snowman(props) {
   /** by default, allow 6 guesses and use provided gallows images. */
 
   const [nWrong, setNWrong] = useState(0);
   const [guessed, setGuessed] = useState(new Set());
-  const [answer, setAnswer] = useState((props.words)[0]);
+  const [answer, setAnswer] = useState(randomWord(props.words));
 
   /** guessedWord: show current-state of word:
    if guessed letters are {a,p,e}, show "app_e" for "apple"
@@ -69,12 +76,14 @@ function Snowman(props) {
         </button>
     ));
   }
-
+  //TODO maybe refactor to if/else rather than ternary?
   /** render: render game */
   return (
     <div className="Snowman">
         {nWrong >= props.maxWrong ? "Game Over": <img src={(props.images)[nWrong]} alt={nWrong} />}
-        {nWrong >= props.maxWrong ? <p className="Snowman-answer">Answer: {answer}</p> : <p className="Snowman-word">{guessedWord()}</p>}
+        {nWrong >= props.maxWrong 
+        ? <p className="Snowman-answer">Answer: {answer}</p> 
+        : <p className="Snowman-word">{guessedWord()}</p>}
         <p>Wrong Guesses: {nWrong}</p>
         {nWrong >= props.maxWrong ? null : <p>{generateButtons()}</p>}
         </div>
@@ -85,7 +94,7 @@ function Snowman(props) {
 Snowman.defaultProps = {
   maxWrong: 6,
   images: [img0, img1, img2, img3, img4, img5, img6],
-  words: ["apple"],
+  words: ENGLISH_WORDS
 };
 
 
